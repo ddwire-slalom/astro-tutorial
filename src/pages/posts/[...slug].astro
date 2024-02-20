@@ -1,17 +1,26 @@
 ---
-import { getCollection } from 'astro:content';
-import MarkdownPostLayout from '../../layouts/MarkdownPostLayout.astro';
+import {getAllArticles, getAEMHeadless} from '../../utils/aemHeadless.js';
+
+import GraphQLArticleLayout from '../../layouts/GraphQLArticleLayout.astro';
 
 export async function getStaticPaths() {
-  const blogEntries = await getCollection('posts');
-  return blogEntries.map(entry => ({
-    params: { slug: entry.slug }, props: { entry },
-  }));
+  const aemHeadlessClient = getAEMHeadless();
+
+  const blogEntries = await getAllArticles();
+  return await Promise.all(blogEntries.data.articleList.items.map(async (entry) => {
+    
+    const slug = entry.slug;
+    const queryResponse = await aemHeadlessClient.runPersistedQuery(`slalom-aem-commons/article-by-slug;slug=${slug}`);
+    const blogEntry = queryResponse.data.articleList.items[0];
+    return ({
+      params: { slug: slug }, props: { entry:blogEntry },
+    })
+   }))
 }
 
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+//const { Content } = await entry.main.html.render();
 ---
-<MarkdownPostLayout frontmatter={entry.data}>
-  <Content />
-</MarkdownPostLayout>
+<GraphQLArticleLayout frontmatter={entry}>
+  
+</GraphQLArticleLayout>

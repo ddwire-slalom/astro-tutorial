@@ -1,0 +1,13 @@
+---
+import BaseLayout from './BaseLayout.astro';
+const { frontmatter } = Astro.props;
+
+const instanceUrl = import.meta.env.AEM_HOST_URI;
+---
+<BaseLayout pageTitle={frontmatter.title}>
+  <p>Written by: {`${frontmatter.authorFragment.firstName} ${frontmatter.authorFragment.lastName}`}</p>
+  {frontmatter.featuredImage && 
+    <img src={`${instanceUrl}/${frontmatter.featuredImage._path}`} width="300" />
+  }
+  <div set:html={frontmatter.main.html} />
+</BaseLayout>

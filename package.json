@@ -10,9 +10,12 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@adobe/aem-headless-client-js": "^3.3.3",
+    "@adobe/aem-headless-client-nodejs": "^1.1.0",
     "@astrojs/preact": "^3.1.0",
     "@astrojs/rss": "^4.0.5",
     "astro": "^4.4.0",
-    "preact": "^10.19.4"
+    "preact": "^10.19.4",
+    "require": "^2.4.20"
   }
 }

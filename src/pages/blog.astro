@@ -1,17 +1,20 @@
 ---
-import { getCollection } from "astro:content";
+import {getAllArticles} from '../utils/aemHeadless.js';
+
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BlogPost from '../components/BlogPost.astro';
 
 const pageTitle = "My Astro Learning Blog";
-const allPosts = await getCollection("posts");
+
+const queryResponse = await getAllArticles();
+const allPosts = queryResponse.data.articleList.items;
 ---
 <BaseLayout pageTitle={pageTitle}>
   <p>This is where I will post about my journey learning Astro.</p>
 		<ul>
       {allPosts.map((post) => 
-				<BlogPost url={`/posts/${post.slug}/`} title={post.data.title} />
+				<BlogPost url={`/posts/${post.slug}/`} title={post.title} />
 			)}
     </ul>
 </BaseLayout>
